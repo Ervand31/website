@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="border rounded p-3 bg-light">
+        {% if weather %}
+          <h6>Сейчас: +{{ weather.temp_c }}°C, ощущается как +{{ weather.feelslike_c }}°C</h6>
+          <p>{{ weather.condition.text }}</p>
+        {% else %}
+          <h6>Сервис погоды временно недоступен</h6>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="border rounded p-3 bg-white">
+        {% if news %}
+          <div class="news-text">
+            {{ news.text | safe }}
+          </div>
+        {% else %}
+          <p>Извините, новости по данному поиску не найдены.</p>
+          <a href="{{ url_for('news.index') }}" class="btn btn-secondary">Вернуться к новостям</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="border rounded p-3 bg-light text-end">
+        {% if currency %}
+          <h6>Курс рубля: {{ currency }}</h6>
+        {% else %}
+          <h6>Курс валют временно недоступен</h6>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+      <div class="card p-4 mb-4">
+        <h5>Оставить комментарий</h5>
+        <form action="{{ url_for('news.add_comment', news_id=news.id) }}" method="post">
+          {{ form.hidden_tag() }}
+          <div class="form-group mb-3">
+            {{ form.comment_text.label(class="form-label") }}
+            {{ form.comment_text(class="form-control") }}
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Отправить</button>
+        </form>
+      </div>
+
+      <div class="card p-4">
+        <h5>Комментарии:</h5>
+        {% if news.comments %}
+          {% for comment in news.comments %}
+            <div class="card mb-3">
+              <div class="card-body">
+                <h6 class="card-title">{{ comment.user.username }}</h6>
+                <p>{{ comment.text }}</p>
+                <small class="text-muted">{{ comment.created.strftime('%Y-%m-%d %H:%M') }}</small>
+                {% if current_user.is_authenticated and (current_user.status == 'admin' or current_user.status == 'user' or comment.user == current_user) %}
+                  <form method="post" action="{{ url_for('news.delete_comment', comment_id=comment.id) }}" class="mt-2">
+                    {{ form.hidden_tag() }}
+                    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                  </form>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>Комментариев пока нет.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

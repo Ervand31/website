@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <!-- Левая колонка с погодой -->
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          {% if weather %}
+            <h6>Погода в Москве: <br>Сейчас +{{ weather.temp_c }}, ощущается как +{{ weather.feelslike_c }}, {{ weather.condition.text }}</h6>
+          {% else %}
+            <h6>Сервис погоды временно недоступен</h6>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Центральная колонка с новостями -->
+    <div class="col-md-6">
+      {% if data %}
+        {% for news in data %}
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5><a href="{{ url_for('news.single_news', news_id=news.id) }}" class="text-decoration-none">{{ news.title }}</a></h5>
+              <p><small class="text-muted">{{ news.date.strftime('%d %B %Y') }}</small></p>
+              <p><small>Комментарии: {{ news.comments_count() }}</small></p>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="alert alert-warning" role="alert">
+          Извините, новости по данному поиску не найдены.
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Правая колонка с курсом валют -->
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body text-end">
+          {% if currency %}
+            <h6>Курс рубля сейчас: {{ currency }}</h6>
+          {% else %}
+            <h6>Курс валют временно недоступен</h6>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

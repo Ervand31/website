@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class='row'>
+  <div class='col-4'></div>
+  <div class='col-4'>
+      <form action="{{ url_for('user.process_reg') }}" method="post">
+          {{ form.hidden_tag() }}
+          <div class='form-group'>
+            {{ form.name.label }} <br>
+            {{ form.name() }}
+        </div>
+          <div class='form-group'>
+            {{ form.surname.label }} <br>
+            {{ form.surname() }}
+        </div>
+          <div class='form-group'>
+            {{ form.mail.label }} <br>
+            {{ form.mail() }}
+        </div>
+          <div class='form-group'>
+              {{ form.username.label }} <br>
+              {{ form.username() }}
+          </div>
+          <div class='form-group'>
+              {{ form.password.label }} <br>
+              {{ form.password() }}
+          </div>
+          <div class='form-group'>
+            {{ form.confirm_password.label }} <br>
+            {{ form.confirm_password() }}
+        </div>
+          <br>
+              {{ form.submit }}
+      </form>
+  </div>
+  <div class='col-4'></div>
+</div>
+{% endblock %}
