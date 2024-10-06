@@ -9,7 +9,7 @@ blueprint = Blueprint('user', __name__)
 
 
 @blueprint.route('/login')
-def login():
+def login() -> str:
     if current_user.is_authenticated:
         return redirect(url_for('news.index'))
     title = 'Авторизация'
@@ -22,7 +22,7 @@ def login():
 
 
 @blueprint.route('/process_login', methods=['POST'])
-def process_login():
+def process_login() -> str:
     form = LoginForm()
     user = User.query.filter(User.username == form.username.data).first()
     if user and user.check_password(form.password.data):
@@ -34,13 +34,13 @@ def process_login():
 
 
 @blueprint.route('/logout')
-def logout():
+def logout() -> str:
     logout_user()
     return redirect(url_for('news.index'))
 
 
 @blueprint.route('/registration')
-def registration():
+def registration() -> str:
     if current_user.is_authenticated:
         return redirect(url_for('news.index'))
     title = 'Регистрация'
@@ -74,7 +74,7 @@ def process_reg():
 
 
 @blueprint.route('/personal', methods=['GET', 'POST'])
-def personal():
+def personal() -> str:
     title = "Личный кабинет"
     if current_user.is_authenticated:
         form = Personalform(obj=current_user)

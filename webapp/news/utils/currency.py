@@ -2,7 +2,7 @@ import requests
 from pprint import pprint
 
 
-def currency_rate():
+def currency_rate() -> float | str:
     url = "https://api.apilayer.com/exchangerates_data/latest?symbols=RUB&base=EUR"
     params = {
         'apikey': "wrDKnixyZDxjqDFo60SwqEB22nBX3O72",

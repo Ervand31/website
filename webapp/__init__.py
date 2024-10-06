@@ -1,4 +1,3 @@
-import os
 from flask import Flask
 from flask_login import LoginManager
 from flask_migrate import Migrate
@@ -8,11 +7,8 @@ from webapp.news.views import blueprint as news_blueprint
 from webapp.user.views import blueprint as user_blueprint
 # from webapp.parse import parse_news
 
-if os.name != 'nt':
-    import fcntl
 
-
-def create_app():
+def create_app() -> Flask:
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
     db.init_app(app)

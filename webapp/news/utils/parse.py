@@ -4,6 +4,7 @@ from datetime import datetime
 from webapp.db import db
 from webapp.news import models
 from pprint import pprint
+from typing import List
 # from sqlalchemy import text
 
 
@@ -18,7 +19,7 @@ def get_html(url: str) -> str | bool:
         return False
 
 
-def parse_news(url):
+def parse_news(url: str) -> List:
     from webapp import create_app
     app = create_app()
     with app.app_context():
@@ -43,16 +44,29 @@ def parse_news(url):
         return news_data
 
 
-def parse_news_content(url):
+def parse_news_content(url: str) -> str | None:
     html = get_html(url)
     if not html:
         return None
     soup = BeautifulSoup(html, 'html.parser')
-    content = soup.find('div', class_="er-page-left")
-    # for tag in content(['a', 'iframe', 'form', 'script', 'noscript']):
-    #     tag.decompose()
-    if content:
-        return content.decode_contents()
+    # content = soup.find('div', class_="er-page-left")
+    # # for tag in content(['a', 'iframe', 'form', 'script', 'noscript']):
+    # #     tag.decompose()
+    # if content:
+    #     return content.decode_contents()
+    # else:
+    #     return None
+   # Парсим все теги <p> внутри тега <article>
+    article = soup.find('article')
+    if not article:
+        return None
+
+    paragraphs = article.find_all('p')
+    paragraphs = paragraphs[:-2]
+    text_content = '\n'.join([p.get_text(strip=True) for p in paragraphs])
+
+    if text_content:
+        return text_content
     else:
         return None
 
@@ -75,7 +89,7 @@ def parse_news_content(url):
 #     save_all_news()
 
 
-def save_news(title, url, date, text):
+def save_news(title: str, url: str, date: datetime, text: str):
     check_news = models.News.query.filter(models.News.url == url).count()
     if not check_news:
         new_news = models.News(
@@ -88,7 +102,7 @@ def save_news(title, url, date, text):
         db.session.commit()
 
 
-def save_all_news(url):
+def save_all_news(url: str):
     news_data = parse_news(url)
     for title, url, date, text in news_data:
         if text:

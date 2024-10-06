@@ -32,7 +32,7 @@ def index() -> str:
 
 
 @blueprint.route('/search', methods=['GET', 'POST'])
-def search():
+def search() -> str:
     query = request.form['search'].lower()
     data = News.query.all()
     weather = weather_by_city('Moscow')
@@ -52,7 +52,7 @@ def search():
 
 @blueprint.route('/news/<int:news_id>')
 # @login_required
-def single_news(news_id):
+def single_news(news_id: int) -> str:
     form = CommentForm()
     news = News.query.get(news_id)
     comment_id = request.args.get('comment_id')
@@ -75,7 +75,7 @@ def single_news(news_id):
 
 @blueprint.route('/news/<int:news_id>/comment', methods=['POST'])
 @login_required
-def add_comment(news_id):
+def add_comment(news_id: int):
     form = CommentForm()
     bad_words = ["Жопа", "Тест", "Путин"]
     if form.validate_on_submit():
@@ -101,7 +101,7 @@ def add_comment(news_id):
 
 @blueprint.route('/del-comment/<int:comment_id>', methods=['POST'])
 @login_required
-def delete_comment(comment_id):
+def delete_comment(comment_id: int):
     comment = Comment.query.get_or_404(comment_id)
     news_id = comment.news_id
     if current_user.status == 'admin' or comment.user.id == current_user.id:
