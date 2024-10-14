@@ -8,7 +8,7 @@
       <div class="card">
         <div class="card-body">
           {% if weather %}
-            <h6>Погода в Москве: <br>Сейчас +{{ weather.temp_c }}, ощущается как +{{ weather.feelslike_c }}, {{ weather.condition.text }}</h6>
+            <h6>Погода в Москве: <br>Сейчас {{ weather.temp_c }}, ощущается как {{ weather.feelslike_c }}, {{ weather.condition.text }}</h6>
           {% else %}
             <h6>Сервис погоды временно недоступен</h6>
           {% endif %}
