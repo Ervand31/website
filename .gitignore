@@ -2,3 +2,5 @@ __pycache__/
 env/
 lesson.py
 run.bat
+webapp.db
+webapp/config.py
