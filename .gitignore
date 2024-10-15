@@ -3,3 +3,4 @@ env/
 lesson.py
 run.bat
 webapp.db
+config.py

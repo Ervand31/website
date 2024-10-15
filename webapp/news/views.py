@@ -17,7 +17,6 @@ blueprint = Blueprint('news', __name__)
 
 @blueprint.route('/')
 def index() -> str:
-    print(type(render_template('index.html')))
     weather = weather_by_city('Moscow')
     currency = currency_rate()
     title = 'Наш сайт'
